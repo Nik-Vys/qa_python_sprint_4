@@ -1,24 +1,87 @@
+import pytest
+
 from main import BooksCollector
 
-# класс TestBooksCollector объединяет набор тестов, которыми мы покрываем наше приложение BooksCollector
-# обязательно указывать префикс Test
+
 class TestBooksCollector:
 
-    # пример теста:
-    # обязательно указывать префикс test_
-    # дальше идет название метода, который тестируем add_new_book_
-    # затем, что тестируем add_two_books - добавление двух книг
-    def test_add_new_book_add_two_books(self):
-        # создаем экземпляр (объект) класса BooksCollector
-        collector = BooksCollector()
+    # Проверка добавления одной книги в словарь books_genre
+    def test_add_new_book_add_one_book(self):
+        collection = BooksCollector()
+        collection.add_new_book('Война и Мир')
+        assert len(collection.get_books_genre()) == 1
 
-        # добавляем две книги
-        collector.add_new_book('Гордость и предубеждение и зомби')
-        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+    # Негативная проверка добавления книги с именем в 0 символов и более 40 символов
+    @pytest.mark.parametrize('book',['','ВойнаиМирВойнаиМирВойнаиМирВойнаиМирВойнаиМир'])
+    def test_add_new_book_wrong_name_not_added(self,book):
+        collection = BooksCollector()
+        collection.add_new_book(book)
+        assert len(collection.get_books_genre()) == 0
 
-        # проверяем, что добавилось именно две
-        # словарь books_rating, который нам возвращает метод get_books_rating, имеет длину 2
-        assert len(collector.get_books_rating()) == 2
+    # Негативная проверка повторного добавления книги в словарь books_genre
+    def test_add_new_book_same_book_not_added(self):
+        collection = BooksCollector()
+        collection.add_new_book('Война и Мир')
+        collection.add_new_book('Война и Мир')
+        assert len(collection.get_books_genre()) == 1
 
-    # напиши свои тесты ниже
-    # чтобы тесты были независимыми в каждом из них создавай отдельный экземпляр класса BooksCollector()
+    # Проверка на установление жанра книге из списка genre
+    def test_set_book_genre_set_genre(self):
+        book = 'Гарри Поттер'
+        genre = 'Фантастика'
+        collection = BooksCollector()
+        collection.add_new_book(book)
+        collection.set_book_genre(book,genre)
+        assert  collection.get_book_genre(book) == genre
+
+    # Негативная проверка на установление жанра книге не из списка genre
+    def test_set_book_genre_not_set_other_genre(self):
+        book = 'Война и мир'
+        genre = 'Роман'
+        collection = BooksCollector()
+        collection.add_new_book(book)
+        collection.set_book_genre(book,genre)
+        assert not collection.get_book_genre(book) == genre
+
+    # Проверка вывода книги с определённым жанром
+    def test_get_books_with_specific_genre_receive_books(self):
+        collection = BooksCollector()
+        books = ['Оно','Гарри Поттер','Убийство в "Восточном экспрессе"']
+        genres = ['Ужасы','Фантастика','Детективы']
+        for book in books:
+            collection.add_new_book(book)
+
+        for i in range(len(books)):
+            collection.set_book_genre(books[i], genres[i])
+        assert collection.get_books_with_specific_genre('Ужасы') == ['Оно']
+
+    # Проверка вывода книг с жанром, подходящих для детей
+    def test_get_books_for_children_receive_books(self):
+        collection = BooksCollector()
+        books = ['Оно','Гарри Поттер','Убийство в "Восточном экспрессе"']
+        genres = ['Ужасы','Фантастика','Детективы']
+        for book in books:
+            collection.add_new_book(book)
+
+        for i in range(len(books)):
+            collection.set_book_genre(books[i], genres[i])
+
+        books_for_children = collection.get_books_for_children()
+        assert 'Гарри Поттер' in books_for_children and len(books_for_children) == 1
+
+    # Проверка добавления книги в Избранное
+    def test_add_book_in_favorites_book_added(self):
+        collection = BooksCollector()
+        book ='Война и мир'
+        collection.add_new_book(book)
+        collection.add_book_in_favorites(book)
+        assert len(collection.get_list_of_favorites_books()) == 1
+
+    # Проверка удаления книги из Избранного
+    def test_delete_book_from_favorites_book_deleted(self):
+        collection = BooksCollector()
+        book ='Война и мир'
+        collection.add_new_book(book)
+        collection.add_book_in_favorites(book)
+        collection.delete_book_from_favorites(book)
+        assert len(collection.get_list_of_favorites_books()) == 0
