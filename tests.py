@@ -21,8 +21,8 @@ class TestBooksCollector:
     # Негативная проверка повторного добавления книги в словарь books_genre
     def test_add_new_book_same_book_not_added(self):
         collection = BooksCollector()
-        collection.add_new_book('Война и Мир')
-        collection.add_new_book('Война и Мир')
+        collection.add_new_book('Война и мир')
+        collection.add_new_book('Война и мир')
         assert len(collection.get_books_genre()) == 1
 
     # Проверка на установление жанра книге из списка genre
