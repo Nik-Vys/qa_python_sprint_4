@@ -8,7 +8,7 @@ class TestBooksCollector:
     # Проверка добавления одной книги в словарь books_genre
     def test_add_new_book_add_one_book(self):
         collection = BooksCollector()
-        collection.add_new_book('Война и Мир')
+        collection.add_new_book('Война и мир')
         assert len(collection.get_books_genre()) == 1
 
     # Негативная проверка добавления книги с именем в 0 символов и более 40 символов
