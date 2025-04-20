@@ -16,6 +16,9 @@
 
 * test_set_book_genre_set_genre
 
+**Проверка получения жанра книги по её имени:**
+* test_get_book_genre_genre_appeared
+
 **Негативная проверка на установление жанра книге не из списка "genre":**
 
 * test_set_book_genre_not_set_other_genre
@@ -31,6 +34,10 @@
 **Проверка добавления книги в Избранное:**
 
 * test_add_book_in_favorites_book_added
+
+**Проверка получения списка книг из Избранного:**
+
+* test_get_list_of_favorites_books_favorites_appeared
 
 **Проверка удаления книги из Избранного:**
 

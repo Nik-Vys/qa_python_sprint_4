@@ -32,6 +32,15 @@ class TestBooksCollector:
         collection = BooksCollector()
         collection.add_new_book(book)
         collection.set_book_genre(book,genre)
+        assert  collection.books_genre.get(book) == genre
+
+    # Проверка получения жанра книги по её имени
+    def test_get_book_genre_genre_appeared(self):
+        book = 'Гарри Поттер'
+        genre = 'Фантастика'
+        collection = BooksCollector()
+        collection.add_new_book(book)
+        collection.set_book_genre(book,genre)
         assert  collection.get_book_genre(book) == genre
 
     # Негативная проверка на установление жанра книге не из списка genre
@@ -41,7 +50,7 @@ class TestBooksCollector:
         collection = BooksCollector()
         collection.add_new_book(book)
         collection.set_book_genre(book,genre)
-        assert not collection.get_book_genre(book) == genre
+        assert not collection.books_genre.get(book) == genre
 
     # Проверка вывода книги с определённым жанром
     def test_get_books_with_specific_genre_receive_books(self):
@@ -75,6 +84,14 @@ class TestBooksCollector:
         book ='Война и мир'
         collection.add_new_book(book)
         collection.add_book_in_favorites(book)
+        assert len(collection.favorites) == 1
+
+    # Проверка получения списка книг из Избранного
+    def test_get_list_of_favorites_books_favorites_appeared(self):
+        collection = BooksCollector()
+        book ='Война и мир'
+        collection.add_new_book(book)
+        collection.add_book_in_favorites(book)
         assert len(collection.get_list_of_favorites_books()) == 1
 
     # Проверка удаления книги из Избранного
@@ -84,4 +101,4 @@ class TestBooksCollector:
         collection.add_new_book(book)
         collection.add_book_in_favorites(book)
         collection.delete_book_from_favorites(book)
-        assert len(collection.get_list_of_favorites_books()) == 0
+        assert len(collection.favorites) == 0
