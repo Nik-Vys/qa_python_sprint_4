@@ -50,7 +50,7 @@ class TestBooksCollector:
         collection = BooksCollector()
         collection.add_new_book(book)
         collection.set_book_genre(book,genre)
-        assert not collection.books_genre.get(book) == genre
+        assert not collection.get_book_genre(book)
 
     # Проверка вывода книги с определённым жанром
     def test_get_books_with_specific_genre_receive_books(self):
@@ -92,7 +92,7 @@ class TestBooksCollector:
         book ='Война и мир'
         collection.add_new_book(book)
         collection.add_book_in_favorites(book)
-        assert len(collection.get_list_of_favorites_books()) == 1
+        assert collection.get_list_of_favorites_books() == ['Война и мир']
 
     # Проверка удаления книги из Избранного
     def test_delete_book_from_favorites_book_deleted(self):
